@@ -1,0 +1,91 @@
+LABEL org.label-schema.name=jdownloader-2 org.label-schema.description=Docker container for JDownloader 2 org.label-schema.version=23.03.1 org.label-schema.vcs-url=https://github.com/jlesage/docker-jdownloader-2 org.label-schema.schema-version=1.0
+EXPOSE map[3129/tcp:{}]
+VOLUME [/output]
+RUN |1 DOCKER_IMAGE_VERSION=23.03.1 /bin/sh -c set-cont-env APP_NAME "JDownloader 2" && \
+     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
+     true # buildkit
+COPY /defaults/JDownloader.jar /defaults/JDownloader.jar # buildkit
+COPY rootfs/ / # buildkit
+RUN |1 DOCKER_IMAGE_VERSION=23.03.1 /bin/sh -c APP_ICON_URL=https://raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/jdownloader-2-icon.png && \
+     install_app_icon.sh "$APP_ICON_URL" # buildkit
+RUN |1 DOCKER_IMAGE_VERSION=23.03.1 /bin/sh -c add-pkg \
+         java-common \
+         openjdk8-jre \
+         jq \
+         ttf-dejavu \
+         ffmpeg \
+         rtmpdump \
+         moreutils # buildkit
+WORKDIR /tmp
+ARG DOCKER_IMAGE_VERSION
+LABEL org.label-schema.name=baseimage-gui org.label-schema.description=A minimal docker baseimage to ease creation of X graphical application containers org.label-schema.version=4.4.0 org.label-schema.vcs-url=https://github.com/jlesage/docker-baseimage-gui org.label-schema.schema-version=1.0
+ARG IMAGE_VERSION=unknown
+EXPOSE map[5800/tcp:{} 5900/tcp:{}]
+ENV DISPLAY_WIDTH=1920 DISPLAY_HEIGHT=1080 DARK_MODE=0 SECURE_CONNECTION=0 SECURE_CONNECTION_VNC_METHOD=SSL SECURE_CONNECTION_CERTS_CHECK_INTERVAL=60 WEB_LISTENING_PORT=5800 VNC_LISTENING_PORT=5900 VNC_PASSWORD= ENABLE_CJK_FONT=0
+COPY /opt/noVNC /opt/noVNC # buildkit
+COPY /tmp/dhparam.pem /defaults/ # buildkit
+COPY /tmp/nginx-install /opt/base/ # buildkit
+COPY /tmp/yad-install/usr/bin/yad /opt/base/bin/ # buildkit
+COPY /tmp/xdpyprobe/xdpyprobe /opt/base/bin/ # buildkit
+COPY /tmp/fontconfig-install/opt /opt # buildkit
+COPY /tmp/openbox-install/usr/bin/obxprop /opt/base/bin/ # buildkit
+COPY /tmp/openbox-install/usr/bin/openbox /opt/base/bin/ # buildkit
+COPY /tmp/xkbcomp-install/usr/bin/xkbcomp /opt/base/bin/ # buildkit
+COPY /tmp/xkb-install/usr/share/X11/xkb /opt/base/share/X11/xkb # buildkit
+COPY /tmp/tigervnc-install/usr/bin/vncpasswd /opt/base/bin/ # buildkit
+COPY /tmp/tigervnc-install/usr/bin/Xvnc /opt/base/bin/ # buildkit
+COPY rootfs/ / # buildkit
+COPY helpers/* /opt/base/bin/ # buildkit
+RUN |2 ALPINE_PKGS=    openssl \
+     netcat-openbsd  DEBIAN_PKGS=    netcat \
+     net-tools \
+     openssl  /bin/sh -c if [ -n "$(which apk)" ]; then \
+         add-pkg ${ALPINE_PKGS}; \
+     else \
+         add-pkg ${DEBIAN_PKGS}; \
+     fi && \
+     rm -rf /var/cache/fontconfig/* # buildkit
+ARG DEBIAN_PKGS
+ARG ALPINE_PKGS
+WORKDIR /tmp
+LABEL org.label-schema.name=baseimage org.label-schema.description=A minimal docker baseimage to ease creation of long-lived application containers org.label-schema.version=3.4.6 org.label-schema.vcs-url=https://github.com/jlesage/docker-baseimage org.label-schema.schema-version=1.0
+ARG IMAGE_VERSION=unknown
+CMD ["/init"]
+VOLUME [/config]
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/base/sbin:/opt/base/bin ENV=/root/.docker_rc USER_ID=1000 GROUP_ID=1000 SUP_GROUP_IDS= UMASK=0022 LANG=en_US.UTF-8 TZ=Etc/UTC KEEP_APP_RUNNING=0 APP_NICENESS=0 INSTALL_PACKAGES= CONTAINER_DEBUG=0
+RUN |3 TARGETPLATFORM=linux/amd64 ALPINE_PKGS=    tzdata \
+     shadow  DEBIAN_PKGS=    tzdata  /bin/sh -c /opt/base/bin/set-cont-env DOCKER_IMAGE_PLATFORM "${TARGETPLATFORM:-}" && \
+     true # buildkit
+COPY rootfs/ / # buildkit
+RUN |3 TARGETPLATFORM=linux/amd64 ALPINE_PKGS=    tzdata \
+     shadow  DEBIAN_PKGS=    tzdata  /bin/sh -c mkdir -p \
+         /defaults \
+         /opt/base/etc/logrotate.d \
+         /etc/services.d \
+         /etc/cont-env.d \
+         /etc/cont-init.d \
+         /etc/cont-finish.d \
+         /etc/cont-logrotate.d \
+     && true # buildkit
+RUN |3 TARGETPLATFORM=linux/amd64 ALPINE_PKGS=    tzdata \
+     shadow  DEBIAN_PKGS=    tzdata  /bin/sh -c if [ -f /root/.profile ]; then \
+         echo "# Include Docker container definitions." >> /root/.profile && \
+         echo ". /root/.docker_rc" >> /root/.profile; \
+     fi # buildkit
+RUN |3 TARGETPLATFORM=linux/amd64 ALPINE_PKGS=    tzdata \
+     shadow  DEBIAN_PKGS=    tzdata  /bin/sh -c if [ -n "$(which apk)" ]; then \
+         /opt/base/bin/add-pkg ${ALPINE_PKGS}; \
+     else \
+         /opt/base/bin/add-pkg ${DEBIAN_PKGS}; \
+     fi # buildkit
+ARG DEBIAN_PKGS
+ARG ALPINE_PKGS
+COPY helpers/* /opt/base/bin/ # buildkit
+COPY /tmp/logrotate-install/usr/sbin/logrotate /opt/base/sbin/ # buildkit
+COPY /tmp/su-exec/su-exec /opt/base/sbin/su-exec # buildkit
+COPY /tmp/logmonitor/logmonitor /opt/base/bin/ # buildkit
+COPY /tmp/cinit/cinit /opt/base/sbin/ # buildkit
+WORKDIR /tmp
+ARG TARGETPLATFORM
+/bin/sh -c #(nop)  CMD ["/bin/sh"]
+/bin/sh -c #(nop) ADD file:ac5fb7eb0d68040d948989f0a50914d0d4a6b631cfe76b508eecd82eb7d46953 in /

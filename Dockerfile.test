@@ -1,0 +1,25 @@
+# Docker image version is provided via build arg.
+ARG DOCKER_IMAGE_VERSION=
+
+# Define software download URLs.
+ARG ROMVAULT_URL=https://www.romvault.com/download/ROMVault_V3.5.2.zip
+
+# Download ROMVault
+FROM --platform=$BUILDPLATFORM alpine:3.16 AS jd2
+RUN \
+    apk --no-cache add curl && \
+    mkdir -p /defaults && \
+    curl -# -L -o /defaults/ROMVault_V3.5.2.zip ${ROMVAULT_URL} && \
+    unzip /defaults/ROMVault_V3.5.2.zip -d /defaults
+
+# Pull base image.
+FROM jlesage/baseimage-gui:alpine-3.16-v4.4.0
+
+# Install mono
+RUN apk add --no-cache mono --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing && \
+    apk add --no-cache --virtual=.build-dependencies ca-certificates && \
+    cert-sync /etc/ssl/certs/ca-certificates.crt && \
+    apk del .build-dependencies
+
+ARG DOCKER_IMAGE_VERSION
+
