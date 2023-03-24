@@ -1,5 +1,5 @@
 # FROM jlesage/baseimage-gui:ubuntu-18.04
-FROM jlesage/baseimage-gui:ubuntu-20.04
+FROM jlesage/baseimage-gui:ubuntu-20.04-v4.4.0
 
 RUN set -x && \
     apt-get update && \
