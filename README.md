@@ -1,3 +1,5 @@
+[![Publish Docker image](https://github.com/laromicas/docker-romvault/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/laromicas/docker-romvault/actions/workflows/build-and-push.yml)
+
 # Docker container for ROMVault
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/laromicas)
 

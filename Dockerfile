@@ -37,8 +37,8 @@ RUN \
     echo ROMVAULT_DOWNLOAD=${ROMVAULT_DOWNLOAD} && \
     echo RVCMD_DOWNLOAD=${RVCMD_DOWNLOAD} && \
     # Document Versions
-    echo "romvault" $(basename --suffix=.zip $ROMVAULT_DOWNLOAD | cut -d "_" -f 2) >> /VERSIONS && \
-    echo "rvcmd" $(basename --suffix=.zip $RVCMD_DOWNLOAD | cut -d "_" -f 2) >> /VERSIONS && \
+    echo "romvault" $(basename ${ROMVAULT_DOWNLOAD} .zip | cut -d "_" -f 2) >> /VERSIONS && \
+    echo "rvcmd" $(basename ${RVCMD_DOWNLOAD} .zip | cut -d "_" -f 2) >> /VERSIONS && \
     # Download RomVault
     mkdir -p /defaults/ && mkdir -p /opt/romvault/ && \
     curl --output /defaults/romvault.zip "https://www.romvault.com/${ROMVAULT_DOWNLOAD}" && \
@@ -71,10 +71,15 @@ RUN \
 # Add files.
 COPY rootfs/ /
 COPY --from=rv /opt/romvault/ /opt/romvault/
+COPY --from=rv /VERSIONS /VERSIONS
+RUN chmod +x /startapp.sh
+RUN chmod +x /etc/cont-init.d/99-romvault
 
 # Set internal environment variables.
 RUN \
+    export ROMVAULT_VERSION=$(echo "$(grep romvault /VERSIONS | cut -d' ' -f2)") && \
     set-cont-env APP_NAME "ROMVault" && \
+    set-cont-env APP_VERSION "$ROMVAULT_VERSION" && \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
     true
 
