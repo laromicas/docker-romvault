@@ -12,7 +12,7 @@ This image is in no way affiliated with GordonJ. The author of ROMVault, if you 
 
 ---
 
-[![ROMVault](https://www.romvault.com/graphics/romvaultTZ.png)](http://www.romvault.com)
+[![ROMVault](/media/romvault-logo.png)](http://www.romvault.com)
 
 RomVault will take one or more DAT files and your set of ROM (zip) files, and clean up your files to match your DAT files. If you find more ROMs to add to your collection RomVault will scan and merge in these files, and if new DATs are released you can easily scan in these new DATs and update your ROM collections to match, all of this can be done with just a few button clicks in the UI.
 
