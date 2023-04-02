@@ -5,7 +5,7 @@
 #mkdir -p /run/s6/services/app/RomVault3_1.Cache
 #chown -vR $USER_ID:$GROUP_ID /run/s6/services/app
 
-ln -s /config /romvault
+ln -fs /config /romvault
 
 APP_NAME="RomVault ($(grep romvault /VERSIONS | cut -d' ' -f2)) /config"
 
