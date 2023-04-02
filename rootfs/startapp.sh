@@ -6,15 +6,18 @@ set -xe
 HOME=/config
 export HOME
 
+cd /opt/romvault/
+RV_EXE=$(ls | grep -i ROMVault | grep -iv Cmd)
+
 cd /config
 
 # Set up symlinks.
 # We need to launch ROMVault from /config as this is where it will write its config.
-ln -fs /opt/romvault/ROMVault35.exe /config/ROMVault35.exe || true
-ln -fs /opt/romvault/RomVaultCmd.exe /config/RomVaultCmd.exe || true
+ln -fs /opt/romvault/${RV_EXE} /config/${RV_EXE} || true
+ln -fs /opt/romvault/RomVaultCmd /config/RomVaultCmd || true
 ln -fs /opt/romvault/chdman.exe /config/chdman.exe || true
 
 rm -Rf ~/.config/.mono
 
 # exec xterm
-mono /config/ROMVault35.exe
+mono /config/${RV_EXE}

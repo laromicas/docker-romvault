@@ -9,42 +9,52 @@
 #     maybe later if there is demand I will try
 #     to add ARM support.
 #
-ARG DOCKER_IMAGE_VERSION=
+ARG DOCKER_IMAGE_VERSION=1.0.0-rc4
 
 # Define software download URLs.
 ARG ROMVAULT_URL=https://www.romvault.com
+ARG ROMVAULT_VERSION=latest
 
 # Download ROMVault.
 FROM alpine:3.16 AS rv
 ARG ROMVAULT_URL
+ARG ROMVAULT_VERSION
 RUN \
     apk --no-cache add curl && \
+    if [ "$ROMVAULT_VERSION" = "latest" ]; then FILTER='head -1'; else FILTER="grep $ROMVAULT_VERSION"; fi && \
     # Get latest version of ROMVault & RVCmd
     ROMVAULT_DOWNLOAD=$(curl ${ROMVAULT_URL} | \
         sed -n 's/.*href="\([^"]*\).*/\1/p' | \
         grep -i download | \
         grep -i romvault | \
-        # sort -r | \
-        head -1) \
+        sort -r -f -u | \
+        $FILTER) \
         && \
     RVCMD_DOWNLOAD=$(curl ${ROMVAULT_URL} | \
         sed -n 's/.*href="\([^"]*\).*/\1/p' | \
         grep -i download | \
         grep -i rvcmd | \
-        sort -r | \
+        grep -i linux | \
+        sort -r -f -u | \
         head -1) \
         && \
     echo ROMVAULT_DOWNLOAD=${ROMVAULT_DOWNLOAD} && \
     echo RVCMD_DOWNLOAD=${RVCMD_DOWNLOAD} && \
     # Document Versions
-    echo "romvault" $(basename ${ROMVAULT_DOWNLOAD} .zip | cut -d "_" -f 2) >> /VERSIONS && \
-    echo "rvcmd" $(basename ${RVCMD_DOWNLOAD} .zip | cut -d "_" -f 2) >> /VERSIONS && \
+    echo "romvault" $(basename ${ROMVAULT_DOWNLOAD} .zip | cut -d "V" -f 3) >> /VERSIONS && \
+    echo "rvcmd" $(basename ${RVCMD_DOWNLOAD} .zip | cut -d "V" -f 3 | cut -d "-" -f 1) >> /VERSIONS && \
     # Download RomVault
     mkdir -p /defaults/ && mkdir -p /opt/romvault/ && \
-    curl --output /defaults/romvault.zip "https://www.romvault.com/${ROMVAULT_DOWNLOAD}" && \
-    curl --output /defaults/rvcmd.zip "https://www.romvault.com/${RVCMD_DOWNLOAD}" && \
+    curl --output /defaults/romvault.zip "${ROMVAULT_URL}/${ROMVAULT_DOWNLOAD}" && \
+    curl --output /defaults/rvcmd.zip "${ROMVAULT_URL}/${RVCMD_DOWNLOAD}" && \
     unzip /defaults/romvault.zip -d /opt/romvault/ && \
     unzip /defaults/rvcmd.zip -d /opt/romvault/
+
+# COPY ROMVault3.6.0.zip /defaults/romvault.zip
+# RUN \
+#     unzip /defaults/romvault.zip -d /opt/romvault/ && \
+#     echo "romvault 3.6.0" >> /VERSIONS
+
 
 # Pull base image.
 FROM jlesage/baseimage-gui:alpine-3.16-v4.4.0
@@ -84,6 +94,7 @@ RUN \
     true
 
 # Metadata.
+LABEL maintainer="Lak <laromicas@hotmail.com>"
 LABEL \
       org.label-schema.name="romvault" \
       org.label-schema.description="Docker container for ROMVault" \
