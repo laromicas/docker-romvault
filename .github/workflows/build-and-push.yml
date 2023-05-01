@@ -6,7 +6,7 @@ name: Publish Docker image
 
 env:
   DOCKER_IMAGE_NAME: laromicas/romvault
-  PLATFORMS: linux/amd64,linux/386
+  PLATFORMS: linux/amd64,linux/386,linux/arm/v7
 
 on:
   release:
