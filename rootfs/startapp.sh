@@ -21,3 +21,5 @@ rm -Rf ~/.config/.mono
 
 # exec xterm
 mono /config/${RV_EXE}
+
+# wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz

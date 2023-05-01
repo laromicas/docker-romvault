@@ -9,14 +9,14 @@
 #     maybe later if there is demand I will try
 #     to add ARM support.
 #
-ARG DOCKER_IMAGE_VERSION=1.0.0-rc4
+ARG DOCKER_IMAGE_VERSION=1.0.0-rc5
 
 # Define software download URLs.
 ARG ROMVAULT_URL=https://www.romvault.com
 ARG ROMVAULT_VERSION=latest
 
 # Download ROMVault.
-FROM alpine:3.16 AS rv
+FROM alpine:3.17 AS rv
 ARG ROMVAULT_URL
 ARG ROMVAULT_VERSION
 RUN \
@@ -50,6 +50,7 @@ RUN \
     unzip /defaults/romvault.zip -d /opt/romvault/ && \
     unzip /defaults/rvcmd.zip -d /opt/romvault/
 
+# Uses local files instead of downloading
 # COPY ROMVault3.6.0.zip /defaults/romvault.zip
 # RUN \
 #     unzip /defaults/romvault.zip -d /opt/romvault/ && \
@@ -57,7 +58,7 @@ RUN \
 
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.16-v4.4.0
+FROM jlesage/baseimage-gui:alpine-3.17-v4.4.1
 
 # Install mono and dependencies.
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" | cat - /etc/apk/repositories  > repositories && mv -f repositories /etc/apk && \
@@ -86,6 +87,7 @@ RUN chmod +x /startapp.sh
 RUN chmod +x /etc/cont-init.d/99-romvault
 
 # Set internal environment variables.
+ARG DOCKER_IMAGE_VERSION
 RUN \
     export ROMVAULT_VERSION=$(echo "$(grep romvault /VERSIONS | cut -d' ' -f2)") && \
     set-cont-env APP_NAME "ROMVault" && \
