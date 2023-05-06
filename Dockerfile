@@ -93,7 +93,13 @@ RUN \
     set-cont-env APP_NAME "ROMVault" && \
     set-cont-env APP_VERSION "$ROMVAULT_VERSION" && \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
+    WINDOW_NAME="RomVault ($ROMVAULT_VERSION) \/config" && \
+    eval "echo \"$(cat /etc/openbox/main-window-selection.xml)\"" > /etc/openbox/main-window-selection.xml && \
     true
+
+# ROMVAULT_VERSION=$(grep romvault /VERSIONS | cut -d' ' -f2)
+# APP_NAME="RomVault ($ROMVAULT_VERSION) \/config"
+
 
 # Metadata.
 LABEL maintainer="Lak <laromicas@hotmail.com>"

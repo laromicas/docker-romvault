@@ -3,9 +3,3 @@
 #chown -vR $USER_ID:$GROUP_ID /run/s6/services/app
 
 ln -fs /config /romvault
-
-ROMVAULT_VERSION=$(grep romvault /VERSIONS | cut -d' ' -f2)
-APP_NAME="RomVault ($ROMVAULT_VERSION) \/config"
-
-# Add only main window to openbox menu
-echo "<Name>${APP_NAME}</Name>" >> /etc/openbox/main-window-selection.xml
