@@ -6,13 +6,13 @@ docker login --username=laromicas --email=laromicas@hotmail.com
 REPOSITORY              TAG                   IMAGE ID       CREATED             SIZE
 romvault-3.6wip5        latest                8349ef2e65fc   3 minutes ago       905MB
 
-> docker tag bb7e45c79493 laromicas/romvault:latest
-docker tag bb7e45c79493 laromicas/romvault:v1.0.0-3.6.0dev2
-docker tag bb7e45c79493 laromicas/romvault-ubuntu:latest
+> docker tag 7c483898b4ac laromicas/romvault:latest
+docker tag 7c483898b4ac laromicas/romvault:v1.0.0-3.6.1
+docker tag 7c483898b4ac laromicas/romvault-ubuntu:latest
 
 docker push laromicas/romvault:latest
 docker push laromicas/romvault-ubuntu:latest
-docker push laromicas/romvault:v1.0.0-3.6.0dev2
+docker push laromicas/romvault:v1.0.0-3.6.1
 
 docker image tag romvault-3.6wip5 laromicas/romvault-3.6wip5:latest
 
