@@ -202,9 +202,7 @@ docker rm romvault
 
 ### Bugs & Known Issues
 
-- Running DatVault hangs execution.
 - Opening any link (almost any of Help Menu) crashes the application.
-- Missing text on some parts [ROMVault Open Issue](https://romvault.convas.io/bugs/missing-text-when-using-linux-clh0zjrtv00igos281qd3ik27).
 
 **NOTE**: Since all application's data is saved under the `/config` container
 folder, destroying and re-creating a container is not a problem: nothing is lost
