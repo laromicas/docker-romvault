@@ -107,7 +107,7 @@ of this parameter has the format `<VARIABLE_NAME>=<VALUE>`.
 |`CONTAINER_DEBUG`| Set to `1` to enable debug logging. | `0` |
 |`DISPLAY_WIDTH`| Width (in pixels) of the application's window. | `1920` |
 |`DISPLAY_HEIGHT`| Height (in pixels) of the application's window. | `1080` |
-|`DARK_MODE`| When set to `1`, dark mode is enabled for the application. | `0` |
+|`DARK_MODE`| Needed to enable dark mode, please reffer to [Dark Mode](#darkmode) section for further details. | `0` |
 |`SECURE_CONNECTION`| When set to `1`, an encrypted connection is used to access the application's GUI (either via a web browser or VNC client).  See the [Security](#security) section for more details. | `0` |
 |`SECURE_CONNECTION_VNC_METHOD`| Method used to perform the secure VNC connection.  Possible values are `SSL` or `TLS`.  See the [Security](#security) section for more details. | `SSL` |
 |`SECURE_CONNECTION_CERTS_CHECK_INTERVAL`| Interval, in seconds, at which the system verifies if web or VNC certificates have changed.  When a change is detected, the affected services are automatically restarted.  A value of `0` disables the check. | `60` |
@@ -335,6 +335,15 @@ http://<HOST IP ADDR>:5800
 ```
 <HOST IP ADDR>:5900
 ```
+
+## Dark Mode
+
+To enable Dark Mode you need to set up these things:
+- Set the `DARK_MODE` environment variable to `1`.
+- Start at least once the container to generate the default configuration.
+- Add `<Darkness>true</Darkness>` to the `<Settings>` section of the `RomVault3cfg.xml` file.
+- Download a compatible graphics pack from [RomVault](https://wiki.romvault.com/doku.php?id=graphics_packs) and put the `graphics.zip` in the same folder as the `RomVault3cfg.xml` file.
+
 
 ## Security
 
