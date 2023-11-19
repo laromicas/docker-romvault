@@ -342,7 +342,7 @@ To enable Dark Mode you need to set up these things:
 - Set the `DARK_MODE` environment variable to `1`.
 - Start at least once the container to generate the default configuration.
 - Add `<Darkness>true</Darkness>` to the `<Settings>` section of the `RomVault3cfg.xml` file.
-- Download a compatible graphics pack from [RomVault](https://wiki.romvault.com/doku.php?id=graphics_packs) and put the `graphics.zip` in the same folder as the `RomVault3cfg.xml` file.
+- Download a dark graphics pack from [RomVault](https://wiki.romvault.com/doku.php?id=graphics_packs) and put the `graphics.zip` in the same folder as the `RomVault3cfg.xml` file.
 
 
 ## Security
