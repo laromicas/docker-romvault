@@ -16,7 +16,7 @@ ARG ROMVAULT_URL=https://www.romvault.com
 ARG ROMVAULT_VERSION=latest
 
 # Download ROMVault.
-FROM alpine:3.17 AS rv
+FROM alpine:latest AS rv
 ARG ROMVAULT_URL
 ARG ROMVAULT_VERSION
 RUN \
@@ -58,7 +58,7 @@ RUN \
 #     echo "romvault 3.6.1" >> /VERSIONS
 
 # Pull base image.
-FROM jlesage/baseimage-gui:ubuntu-20.04-v4
+FROM jlesage/baseimage-gui:ubuntu-24.04-v4.7.1
 
 RUN \
     LC_ALL=en_US.UTF-8 && LANG=en_US.UTF-8 && LANG=C && \
