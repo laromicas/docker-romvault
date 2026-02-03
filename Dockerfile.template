@@ -9,7 +9,7 @@
 #     maybe later if there is demand I will try
 #     to add ARM support.
 #
-ARG DOCKER_IMAGE_VERSION=1.0.2-3.7.4
+ARG DOCKER_IMAGE_VERSION={{docker_version}}-{{version_lower}}
 
 # Define software download URLs.
 ARG ROMVAULT_URL=https://www.romvault.com
@@ -49,13 +49,13 @@ RUN \
 #     curl --output /defaults/rvcmd.zip "${ROMVAULT_URL}/${RVCMD_DOWNLOAD}" && \
 #     unzip /defaults/romvault.zip -d /opt/romvault/ && \
 #     unzip /defaults/rvcmd.zip -d /opt/romvault/ && \
-    echo "3.7.4"
+    echo "{{version_upper}}"
 
 # Uses local files instead of downloading
-COPY ROMVault3.7.4.zip /defaults/romvault.zip
+COPY ROMVault{{version_lower}}.zip /defaults/romvault.zip
 RUN \
     unzip /defaults/romvault.zip -d /opt/romvault/ -o && \
-    echo "romvault 3.7.4" >> /VERSIONS
+    echo "romvault {{version_upper}}" >> /VERSIONS
 
 # Pull base image.
 FROM jlesage/baseimage-gui:ubuntu-20.04-v4

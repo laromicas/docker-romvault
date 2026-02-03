@@ -1,0 +1,45 @@
+#!/bin/sh
+
+head -n -3 /var/run/openbox/rc.xml > tmp.txt && mv tmp.txt /var/run/openbox/rc.xml
+
+echo '  <!-- Make sure TrrntzipUI.Net (3.5.2) is not affected. -->
+  <application type="normal" name="TrrntzipUI.Net (3.5.2)">
+    <decor>yes</decor>
+    <maximized>false</maximized>
+    <layer>above</layer>
+  </application>
+
+  <application type="normal" name="RomVault Progress">
+    <decor>yes</decor>
+    <maximized>false</maximized>
+    <layer>above</layer>
+  </application>
+
+  <application type="normal" name="Fixing Files">
+    <decor>yes</decor>
+    <maximized>false</maximized>
+    <layer>above</layer>
+  </application>
+
+  <application type="normal" name="Browse For Folder">
+    <decor>yes</decor>
+    <maximized>false</maximized>
+    <layer>above</layer>
+  </application>
+
+
+</applications>
+
+</openbox_config>
+' >> /var/run/openbox/rc.xml
+
+
+
+# /var/run/openbox/rc.xml
+# echo APP_DEF_NAME=$APP_DEF_NAME
+# echo APP_DEF_CLASS=$APP_DEF_CLASS
+# echo APP_DEF_GROUP_NAME=$APP_DEF_GROUP_NAME
+# echo APP_DEF_GROUP_CLASS=$APP_DEF_GROUP_CLASS
+# echo APP_DEF_ROLE=$APP_DEF_ROLE
+# echo APP_DEF_TITLE=$APP_DEF_TITLE
+# echo APP_DEF_TYPE=$APP_DEF_TYPE
