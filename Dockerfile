@@ -9,7 +9,7 @@
 #     maybe later if there is demand I will try
 #     to add ARM support.
 #
-ARG DOCKER_IMAGE_VERSION=1.0.2-3.7.4
+ARG DOCKER_IMAGE_VERSION=1.0.3-3.7.4
 
 # Define software download URLs.
 ARG ROMVAULT_URL=https://www.romvault.com
@@ -78,6 +78,7 @@ RUN set -x && \
         mono-runtime \
         libmono-system-servicemodel4.0a-cil \
         libgtk2.0-0 \
+        gtk2-engines-pixbuf \
         mono-complete \
         xterm \
         && \
