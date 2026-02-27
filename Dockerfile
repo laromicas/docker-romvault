@@ -1,7 +1,7 @@
 #
 # ROMVault Dockerfile
 #
-# https://github.com/marcusb333/docker-romvault
+# https://github.com/laromicas/docker-romvault
 #
 ARG DOCKER_IMAGE_VERSION=1.0.3-3.7.4
 
