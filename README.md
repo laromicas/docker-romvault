@@ -22,6 +22,7 @@ This image is based on [baseimage_gui](https://hub.docker.com/r/jlesage/baseimag
 ## Table of Content
 
    * [Quick Start](#quick-start)
+   * [Setup Script](#setup-script)
    * [Usage](#usage)
       * [Environment Variables](#environment-variables)
          * [Deployment Considerations](#deployment-considerations)
@@ -30,6 +31,8 @@ This image is based on [baseimage_gui](https://hub.docker.com/r/jlesage/baseimag
       * [Changing Parameters of a Running Container](#changing-parameters-of-a-running-container)
       * [Bugs & Known Issues](#bugs-&-known-issues)
    * [Docker Compose File](#docker-compose-file)
+      * [Using the pre-built image (x86_64)](#using-the-pre-built-image-x86_64)
+      * [Local Build (ARM64 / Mac)](#local-build-arm64--mac)
    * [Docker Image Versioning](#docker-image-versioning)
    * [Docker Image Update](#docker-image-update)
       * [Synology](#synology)
@@ -68,6 +71,46 @@ Where:
   - `/home/user/ROMVault`: This is where the dats and roms files are stored.
 
 Browse to `http://your-host-ip:5800` to access the ROMVault GUI.
+
+## Setup Script
+
+A `setup.sh` script is provided for building and running the Docker image locally. Before using it, download the ROMVault zip from [romvault.com](https://www.romvault.com) and place it in the project directory (e.g. `ROMVault3.7.4.zip`).
+
+```shell
+./setup.sh run
+```
+
+This will create the data directories under `~/ROMVault`, build the Docker image, and start the container. The web UI will be available at `http://localhost:5800`.
+
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `./setup.sh run` | Create directories, build the image, and start the container |
+| `./setup.sh build` | Build the Docker image only |
+| `./setup.sh start` | Start an existing stopped container |
+| `./setup.sh stop` | Stop the running container |
+| `./setup.sh restart` | Restart the container |
+| `./setup.sh status` | Show container status |
+| `./setup.sh logs` | Tail container logs |
+| `./setup.sh clean` | Stop and remove the container and image |
+
+### Configuration
+
+The script can be customized with environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ROMVAULT_DIR` | Base directory for ROMVault data | `~/ROMVault` |
+| `HOST_PORT` | Port to expose the web UI on | `5800` |
+| `USER_ID` | User ID for file ownership | Current user |
+| `GROUP_ID` | Group ID for file ownership | Current group |
+| `TZ` | Timezone | `America/New_York` |
+
+Example:
+```shell
+ROMVAULT_DIR=/data/romvault HOST_PORT=8080 ./setup.sh run
+```
 
 ## Usage
 
@@ -216,8 +259,16 @@ the `/config` folder remains the same).
 Here is an example of a `docker-compose.yml` file that can be used with
 [Docker Compose](https://docs.docker.com/compose/overview/).
 
+**ARM64 / Apple Silicon (Mac) users:** The pre-built Docker Hub image is x86_64
+only. If you are running on an ARM64 platform (e.g., Apple Silicon Macs, Raspberry
+Pi 4/5, or ARM-based cloud instances), you should use Docker Compose with a local
+build so the image is compiled natively for your architecture. See the
+[Local Build (ARM64 / Mac)](#local-build-arm64--mac) section below.
+
 Make sure to adjust according to your needs.  Note that only mandatory network
 ports are part of the example.
+
+### Using the pre-built image (x86_64)
 
 ```yaml
 version: '3'
@@ -232,6 +283,45 @@ services:
       - "/home/user/ROMVault/RomRoot:/config/RomRoot:rw"
       - "/home/user/ROMVault/ToSort:/config/ToSort:rw"
 ```
+
+### Local Build (ARM64 / Mac)
+
+To run on ARM64 or Apple Silicon, use `build: .` to build the image locally
+from the Dockerfile. The Dockerfile automatically detects the target architecture
+and installs the appropriate packages.
+
+On ARM64/Mac, Mono runs in interpreter mode, so you must also set
+`MONO_ENV_OPTIONS=--interpreter` for ROMVault to work correctly.
+
+```yaml
+services:
+  romvault:
+    build: .
+    image: romvault
+    ports:
+      - "5800:5800"
+    environment:
+      - USER_ID=501
+      - GROUP_ID=20
+      - TZ=America/New_York
+      - MONO_ENV_OPTIONS=--interpreter
+    volumes:
+      - ~/ROMVault/config:/config:rw
+      - ~/ROMVault/DatRoot:/config/DatRoot:rw
+      - ~/ROMVault/RomRoot:/config/RomRoot:rw
+      - ~/ROMVault/ToSort:/config/ToSort:rw
+    restart: unless-stopped
+```
+
+Then build and start with:
+
+```shell
+docker compose up -d --build
+```
+
+**Note:** The initial build may take several minutes as it compiles Mono and
+other dependencies for your architecture. Subsequent starts will use the cached
+image.
 
 ## Docker Image Versioning
 

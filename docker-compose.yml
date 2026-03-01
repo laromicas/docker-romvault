@@ -1,0 +1,18 @@
+services:
+  romvault:
+    build: .
+    image: romvault
+    container_name: romvault
+    ports:
+      - "5800:5800"
+    environment:
+      - USER_ID=501
+      - GROUP_ID=20
+      - TZ=America/New_York
+      - MONO_ENV_OPTIONS=--interpreter
+    volumes:
+      - ~/ROMVault/config:/config:rw
+      - ~/ROMVault/DatRoot:/config/DatRoot:rw
+      - ~/ROMVault/RomRoot:/config/RomRoot:rw
+      - ~/ROMVault/ToSort:/config/ToSort:rw
+    restart: unless-stopped
