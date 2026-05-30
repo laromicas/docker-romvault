@@ -24,13 +24,13 @@ rm -Rf ~/.config/.mono
 if [ -n "${IONICE_CLASS}" ]; then
     if [ -n "${IONICE_LEVEL}" ]; then
         echo "Starting with ionice class ${IONICE_CLASS} and level ${IONICE_LEVEL}"
-        exec ionice -c "${IONICE_CLASS}" -n "${IONICE_LEVEL}" mono /config/${RV_EXE}
+        LC_ALL=C exec ionice -c "${IONICE_CLASS}" -n "${IONICE_LEVEL}" mono /config/${RV_EXE}
     else
         echo "Starting with ionice class ${IONICE_CLASS}"
-        exec ionice -c "${IONICE_CLASS}" mono /config/${RV_EXE}
+        LC_ALL=C exec ionice -c "${IONICE_CLASS}" mono /config/${RV_EXE}
     fi
     exit $?
 fi
-mono /config/${RV_EXE}
+LC_ALL=C mono /config/${RV_EXE}
 
 # wmctrl -r :ACTIVE: -b toggle,maximized_vert,maximized_horz

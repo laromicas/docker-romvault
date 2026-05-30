@@ -3,7 +3,7 @@
 #
 # https://github.com/laromicas/docker-romvault
 #
-ARG DOCKER_IMAGE_VERSION=1.0.3-3.7.4
+ARG DOCKER_IMAGE_VERSION=1.0.4-3.7.6
 
 # Define software download URLs.
 ARG ROMVAULT_URL=https://www.romvault.com
@@ -34,7 +34,7 @@ RUN \
     unzip /defaults/romvault.zip -d /opt/romvault/ -o
 
 # Pull base image.
-FROM jlesage/baseimage-gui:ubuntu-20.04-v4
+FROM jlesage/baseimage-gui:ubuntu-20.04-v4.11
 
 RUN \
     LC_ALL=en_US.UTF-8 && LANG=en_US.UTF-8 && LANG=C && \

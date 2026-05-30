@@ -18,7 +18,7 @@ app = typer.Typer(
 )
 console = Console()
 
-DOCKER_VERSION = "1.0.3"
+DOCKER_VERSION = "1.0.4"
 
 
 def open_template() -> str:
@@ -65,7 +65,8 @@ def docker_run(docker_version: str, version: str) -> None:
     console.print(f"\n[bold blue]🚀 Running Docker container:[/bold blue] [cyan]{tag}[/cyan]")
     console.print("[yellow]📡 Port 5800 exposed[/yellow]")
     # os.system(f'docker run --rm -p 5800:5800 {tag}')
-    os.system(f'docker run --rm -p 5800:5800 -e IONICE_CLASS=2 -e IONICE_LEVEL=7 {tag}')
+    # os.system(f'docker run --rm -p 5800:5800 -e IONICE_CLASS=2 -e IONICE_LEVEL=7 {tag}')
+    os.system(f'docker run --rm -p 5800:5800 {tag}')
 
 
 def docker_push(docker_version: str, version: str, tag_latest: bool = False) -> None:
