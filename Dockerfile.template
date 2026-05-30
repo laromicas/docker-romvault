@@ -58,7 +58,7 @@ RUN \
     echo "romvault {{version_upper}}" >> /VERSIONS
 
 # Pull base image.
-FROM jlesage/baseimage-gui:ubuntu-20.04-v4
+FROM jlesage/baseimage-gui:ubuntu-20.04-v4.11
 
 RUN \
     LC_ALL=en_US.UTF-8 && LANG=en_US.UTF-8 && LANG=C && \
