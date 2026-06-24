@@ -2,8 +2,8 @@
 
 head -n -3 /var/run/openbox/rc.xml > tmp.txt && mv tmp.txt /var/run/openbox/rc.xml
 
-echo '  <!-- Make sure TrrntzipUI.Net (3.5.2) is not affected. -->
-  <application type="normal" name="TrrntzipUI.Net (3.5.2)">
+echo '  <!-- Make sure SAM-UI is not affected. -->
+  <application type="normal" name="${SAM_UI_WINDOW_NAME}">
     <decor>yes</decor>
     <maximized>false</maximized>
     <layer>above</layer>
@@ -26,7 +26,6 @@ echo '  <!-- Make sure TrrntzipUI.Net (3.5.2) is not affected. -->
     <maximized>false</maximized>
     <layer>above</layer>
   </application>
-
 
 </applications>
 

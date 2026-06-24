@@ -47,6 +47,8 @@ This image is based on [baseimage_gui](https://hub.docker.com/r/jlesage/baseimag
       * [Routing Based on Hostname](#routing-based-on-hostname)
       * [Routing Based on URL Path](#routing-based-on-url-path)
    * [Shell Access](#shell-access)
+   * [Troubleshooting](#troubleshooting)
+      * [Main Window Not Maximized at Startup](#main-window-not-maximized-at-startup)
    * [Support or Contact](#support-or-contact)
 
 ## Quick Start
@@ -619,6 +621,32 @@ docker exec -ti CONTAINER sh
 
 Where `CONTAINER` is the ID or the name of the container used during its
 creation.
+
+## Troubleshooting
+
+### Main Window Not Maximized at Startup
+
+The Openbox window manager uses match criteria (defined in `main-window-selection.xml`) to identify the ROMVault main window and maximize it on startup. Since the window title includes the ROMVault version and the config path (e.g., `RomVault (3.7.6 WIP4) /config `), the match criteria may stop working when updating ROMVault versions, as the title changes with each release. (Note that the trailing space after `/config` is part of the title and when this happens it doesn't work.)
+
+To inspect the current window properties, run the following command while the container is running:
+
+```shell
+docker exec <CONTAINER_NAME> env DISPLAY=:0 obxprop | grep _OB_APP
+```
+
+Example output:
+
+```
+_OB_APP_TYPE(UTF8_STRING) = "normal"
+_OB_APP_TITLE(UTF8_STRING) = "RomVault (3.7.6 WIP4) /config "
+_OB_APP_GROUP_CLASS(UTF8_STRING) =
+_OB_APP_GROUP_NAME(UTF8_STRING) =
+_OB_APP_CLASS(UTF8_STRING) =
+_OB_APP_NAME(UTF8_STRING) =
+_OB_APP_ROLE(UTF8_STRING) =
+```
+
+The relevant field is `_OB_APP_TITLE`. If the title shown does not match the criteria in your `main-window-selection.xml` or has spaces at the end or start, the window will not be maximized.
 
 ## Support or Contact
 

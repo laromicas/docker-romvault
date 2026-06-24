@@ -100,6 +100,16 @@ COPY --from=rv /VERSIONS /VERSIONS
 RUN chmod +x /startapp.sh
 RUN chmod +x /etc/cont-init.d/99-romvault
 
+# RUN export ROMVAULT_VERSION="$(grep romvault /VERSIONS | cut -d' ' -f2-)" && \
+#     echo "RomVault (${ROMVAULT_VERSION}) \/config" && \
+#     false
+
+RUN \
+    add-pkg locales && \
+    sed-patch 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+ENV LANG=en_US.UTF-8
+
 # Set internal environment variables.
 ARG DOCKER_IMAGE_VERSION
 RUN \
@@ -110,6 +120,11 @@ RUN \
     WINDOW_NAME="RomVault ($ROMVAULT_VERSION) \/config" && \
     set-cont-env WINDOW_NAME "RomVault ($ROMVAULT_VERSION) \/config" && \
     eval "echo \"$(cat /etc/openbox/main-window-selection.xml)\"" > /etc/openbox/main-window-selection.xml && \
+    SAM_UI_WINDOW_NAME="SAM-UI ($ROMVAULT_VERSION)" && \
+    set-cont-env SAM_UI_WINDOW_NAME "SAM-UI ($ROMVAULT_VERSION)" && \
+    sed -i 's/"/\\"/g' /etc/cont-init.d/11-romvault && \
+    # need to excape " in the cat command below so that the variable is evaluated at runtime and not at build time when using ' there is an error in the cat command below so we need to use " instead of ' and escape the " with \"
+    eval "echo \"$(cat /etc/cont-init.d/11-romvault)\"" > /etc/cont-init.d/11-romvault && \
     true
 
 ENV APP_NAME="ROMVault"
