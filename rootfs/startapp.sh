@@ -14,8 +14,6 @@ cd /config
 # Set up symlinks.
 # We need to launch ROMVault from /config as this is where it will write its config.
 ln -fs /opt/romvault/${RV_EXE} /config/${RV_EXE} || true
-ln -fs /opt/romvault/RomVaultCmd /config/RomVaultCmd || true
-ln -fs /opt/romvault/chdman.exe /config/chdman.exe || true
 
 rm -Rf ~/.config/.mono
 
